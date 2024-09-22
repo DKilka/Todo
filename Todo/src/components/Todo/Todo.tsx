@@ -20,7 +20,7 @@ const Todo = () => {
       complete: false,
     };
     try {
-      //TODO in Todo.txt
+      //TODO in Todo.tx
       fetch("#", {
         method: "POST",
         headers: {
