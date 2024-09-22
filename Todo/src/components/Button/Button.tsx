@@ -1,10 +1,23 @@
+import "@styles/button/button.scss";
+
 interface ButtonProps {
   text?: string;
-  onClick?: () => void;
+  type: "submit" | "button";
+  icon?: string;
+  onClick: () => void;
 }
 
-const Button = ({ text = "Button" }: ButtonProps) => {
-  return <h1>{text}</h1>;
+const Button = ({
+  type = "button",
+  text = "Button",
+  icon,
+  onClick,
+}: ButtonProps) => {
+  return (
+    <button type={type} onClick={onClick}>
+      {text} <img src={icon} />
+    </button>
+  );
 };
 
 export default Button;
