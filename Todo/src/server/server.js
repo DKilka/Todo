@@ -1,5 +1,5 @@
 import express from "express";
-import connectToMongoDB from "./mongoDb.js";
+import connectToMongoDB from "./mongoDB.js";
 import todoRoutes from "./routes.js";
 
 const app = express();
