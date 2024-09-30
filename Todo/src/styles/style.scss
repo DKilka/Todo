@@ -1,0 +1,87 @@
+@import url("./nullStyle.scss");
+
+:root {
+  --grey: #dedfe5;
+  --grey-hover: #efefef;
+  --add-button: #00ae1c;
+  --white: #fff;
+}
+#header {
+  text-align: center;
+  box-shadow: 0 0.2rem var(--grey);
+  .new-task {
+    width: 90%;
+    height: 3rem;
+    font-size: 1.3vw;
+    border: none;
+  }
+  .new-task:focus {
+    outline: none;
+  }
+  .add-task {
+    border: none;
+    background-color: var(--add-button);
+    border-radius: 0.5rem;
+    color: var(--white);
+    width: 4rem;
+    height: 2rem;
+    cursor: pointer;
+  }
+}
+#container {
+  text-align: center;
+  margin-top: 1rem;
+  .task-list {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .task {
+    border: 1px solid var(--grey);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.2rem 0.5rem var(--grey);
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 2.5rem;
+    margin-bottom: 1rem;
+    .complete-task {
+      margin: 0 1rem;
+      accent-color: var(--add-button);
+    }
+    .task-text {
+      background-color: transparent;
+      width: 90%;
+      margin-right: 2rem;
+      resize: none;
+      border: none;
+      cursor: auto;
+    }
+    .task-text:focus {
+      outline: none;
+    }
+    .delete-button,
+    .edit-button,
+    .save-button {
+      align-self: center;
+      position: absolute;
+      top: 25%;
+      right: 0;
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+    }
+    .edit-button {
+      right: 2rem;
+    }
+  }
+  .task:hover {
+    background-color: var(--grey-hover);
+  }
+  .delete-all-tasks {
+    width: 25%;
+    cursor: pointer;
+    background-color: var(--white);
+    border: 1px solid var(--grey);
+    border-radius: 0.5rem;
+  }
+}

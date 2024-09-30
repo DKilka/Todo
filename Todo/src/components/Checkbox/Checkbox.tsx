@@ -1,19 +1,24 @@
-import Input from "@components/Input/Input";
-
 interface CheckboxProps {
   labelFor: string;
   isChecked: boolean;
+  className?: string;
   onChange: (e: any) => void;
 }
 
-const Checkbox = ({ labelFor, isChecked, onChange }: CheckboxProps) => {
+const Checkbox = ({
+  labelFor,
+  isChecked,
+  className,
+  onChange,
+}: CheckboxProps) => {
   return (
     <label htmlFor={labelFor}>
-      <Input
+      <input
         type="checkbox"
+        className={className}
+        defaultChecked={isChecked}
+        id={labelFor}
         onChange={onChange}
-        isChecked={isChecked}
-        labelFor="checkbox"
       />
     </label>
   );

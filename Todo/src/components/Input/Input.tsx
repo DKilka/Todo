@@ -1,13 +1,11 @@
-import "@styles/input/input.scss";
-
 interface InputProps {
   labelFor: string;
   type?: string;
   placeholder?: string;
   value?: string;
-  isChecked?: boolean;
+  className?: string;
+  onPress?: (e: any) => void;
   onChange?: (e: any) => void;
-  onClick?: (e: any) => void;
 }
 
 const Input = ({
@@ -15,21 +13,21 @@ const Input = ({
   type = "text",
   placeholder,
   value,
-  isChecked,
+  className,
   onChange,
-  onClick,
+  onPress,
 }: InputProps) => {
   return (
     <label htmlFor={labelFor}>
       <input
         type={type}
-        readOnly={type === "text" || "checkbox" ? false : true}
+        readOnly={type === "text" ? false : true}
         id={labelFor}
-        onChange={onChange}
-        onClick={onClick}
-        value={value}
         placeholder={placeholder}
-        checked={isChecked}
+        className={className}
+        value={value}
+        onChange={onChange}
+        onKeyDown={onPress}
       />
     </label>
   );

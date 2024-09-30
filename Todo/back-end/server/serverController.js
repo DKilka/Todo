@@ -1,4 +1,5 @@
 import TodoModel from "./serverModel.js";
+import { Types } from "mongoose";
 
 const getAllItems = async (req, res) => {
   let todoList;
@@ -11,10 +12,10 @@ const getAllItems = async (req, res) => {
 };
 
 const getItem = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params.id;
   let foundItem;
   try {
-    foundItem = await TodoModel.findById(id);
+    foundItem = await TodoModel.findOne({ id: id });
   } catch (err) {
     console.log(err);
   }
@@ -39,14 +40,14 @@ const createItem = async (req, res) => {
 };
 
 const updateItem = async (req, res) => {
-  const { id } = req.params;
   const { description, complete } = req.body;
+  const id = req.params.id;
 
   try {
-    const updateItem = await TodoModel.findById(id);
+    const updateItem = await TodoModel.findOne({ id: id });
 
     if (description) updateItem.description = description;
-    if (complete) updateItem.complete = complete;
+    if (typeof complete === "boolean") updateItem.complete = complete;
 
     await updateItem.save();
   } catch (err) {
@@ -57,10 +58,10 @@ const updateItem = async (req, res) => {
 };
 
 const deleteItem = async (req, res) => {
-  const { id } = req.params;
+  const id = req.params.id;
 
   try {
-    await TodoModel.findByIdAndDelete(id);
+    await TodoModel.findOneAndDelete({ id: id });
   } catch (err) {
     console.log(err);
   }
