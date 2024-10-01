@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import "@styles/style.scss";
+
 import Button from "@components/Button/Button";
 import Checkbox from "@components/Checkbox/Checkbox";
 import Input from "@components/Input/Input";
@@ -9,7 +10,7 @@ import {
   getTodoList,
   updateTodo,
   deleteTodo,
-} from "@components/RequestsToServer/RequestsToServer";
+} from "../../RequestToServer/RequestsToServer";
 
 import editIcon from "@images/edit-icon.svg";
 import deleteIcon from "@images/delete-icon.svg";
