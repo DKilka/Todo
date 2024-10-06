@@ -5,55 +5,48 @@ import "@styles/style.scss";
 import Button from "@components/Button/Button";
 import Checkbox from "@components/Checkbox/Checkbox";
 import Input from "@components/Input/Input";
-import {
-  createNewTask,
-  getTodoList,
-  updateTodo,
-  deleteTodo,
-} from "../../RequestToServer/RequestsToServer";
+import todoService from "@service/todoService";
 
 import editIcon from "@images/edit-icon.svg";
 import deleteIcon from "@images/delete-icon.svg";
 import saveIcon from "@images/save-icon.svg";
 
-type Todo = {
-  id: string;
-  description: string;
-  complete: boolean;
-};
+import TodoType from "src/types/Todo";
 
-const Todo = () => {
+interface TodoProps {
+  dataTodo: TodoType[];
+}
+
+const Todo = ({ dataTodo }: Required<TodoProps>) => {
   const [input, setInput] = useState<string>("");
   const [editableTodo, setEditableTodo] = useState<string>("");
-  const [todoList, setTodoList] = useState<Todo[]>([]);
-  const [todo, setTodo] = useState<Partial<Todo>>({
+  const [todoList, setTodoList] = useState<TodoType[]>([]);
+  const [todo, setTodo] = useState<Partial<TodoType>>({
     id: "",
     description: "",
     complete: false,
   });
+  const service = todoService();
 
-  const getTodo = async () => {
-    const todo = await getTodoList();
-    if (todo) {
-      setTodoList(todo);
-    }
-  };
+  useEffect(() => {
+    setTodoList(dataTodo);
+  }, [dataTodo]);
 
-  const pressEnter = (e: any, operation: any) => {
-    if (e.key === "Enter" || e.keyCode === 13) {
+  const pressEnter = (e: React.KeyboardEvent, operation: () => void) => {
+    if (e.key === "Enter") {
       operation();
-      return setInput("");
+      setInput("");
     }
   };
 
-  const submitNewTask = () => {
+  const submitTodo = (): void => {
     if (input !== "") {
-      const newTodo = {
+      const newTodo: TodoType = {
         id: crypto.randomUUID(),
         description: input,
         complete: false,
       };
-      createNewTask(newTodo);
+      service.createTodo(newTodo);
       setInput("");
       setTodoList((prevTodoList) => {
         return Array.isArray(prevTodoList)
@@ -63,33 +56,32 @@ const Todo = () => {
     }
   };
 
-  const updateTodoItem = (id: string, e: any) => {
-    const todoItem = todoList.find((el) => el.id === id);
+  const updateTodo = (id: string, e: boolean | string) => {
+    const todoItem: TodoType | undefined = todoList.find(
+      (el: TodoType) => el.id === id
+    );
     if (todoItem) {
-      const updatedTodo = {
+      const updatedTodo: TodoType = {
         id: todoItem.id,
         description: typeof e === "string" ? e : todoItem.description,
         complete: typeof e === "boolean" ? e : todoItem.complete,
       };
       setTodo(updatedTodo);
+      service.updateTodo(updatedTodo, todoItem.id);
     }
   };
 
   const deleteAllTasks = () => {
-    todoList.forEach((el) => {
-      deleteTodo(el.id);
+    todoList.forEach((el: TodoType) => {
+      service.deleteTodo(el.id);
     });
     setTodoList([]);
   };
 
   const saveTodo = (id: string) => {
     setEditableTodo("");
-    updateTodo(todo, id);
+    service.updateTodo(todo, id);
   };
-
-  useEffect(() => {
-    getTodo();
-  }, []);
 
   return (
     <div className="wrapper">
@@ -100,22 +92,23 @@ const Todo = () => {
           labelFor="input"
           type="text"
           value={input}
-          onChange={(e) => {
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setInput(e.target.value);
           }}
-          onPress={(e) => pressEnter(e, submitNewTask)}
+          onPress={(e: React.KeyboardEvent) => pressEnter(e, submitTodo)}
         />
         <Button
+          style={{ backgroundColor: input === "" ? "grey" : "#00ae1c" }}
           text="+Add"
           type="submit"
           className="add-task"
-          onClick={submitNewTask}
+          onClick={submitTodo}
         />
       </div>
       <section id="container">
         <ul className="task-list">
           {todoList.length > 0 &&
-            todoList.map((el) => {
+            todoList.map((el: TodoType) => {
               const isEditable = editableTodo === el.id;
               return (
                 <li key={el.id} className="task">
@@ -123,9 +116,9 @@ const Todo = () => {
                     className="complete-task"
                     labelFor={`checkbox-${el.id}`}
                     isChecked={el.complete}
-                    onChange={(e) => {
-                      updateTodoItem(el.id, e.target.checked);
-                      updateTodo(todo, el.id);
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      const isChecked: boolean = e.target.checked;
+                      updateTodo(el.id, isChecked);
                     }}
                   />
                   <label htmlFor={el.description}>
@@ -134,9 +127,12 @@ const Todo = () => {
                       className="task-text"
                       readOnly={!isEditable}
                       id={el.description}
+                      style={{
+                        textDecoration: el.complete ? "line-through" : "none",
+                      }}
                       defaultValue={el.description}
-                      onChange={(e: any) => {
-                        updateTodoItem(el.id, e.target.value);
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        updateTodo(el.id, e.target.value);
                       }}
                     />
                     {isEditable ? (
@@ -160,9 +156,11 @@ const Todo = () => {
                           icon={deleteIcon}
                           className="delete-button"
                           onClick={() => {
-                            deleteTodo(el.id);
+                            service.deleteTodo(el.id);
                             setTodoList((prevTodoList) =>
-                              prevTodoList.filter((todo) => todo.id !== el.id)
+                              prevTodoList.filter(
+                                (todo: TodoType) => todo.id !== el.id
+                              )
                             );
                           }}
                         />

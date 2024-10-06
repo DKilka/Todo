@@ -4,6 +4,7 @@ interface ButtonProps {
   icon?: string;
   className?: string;
   imgClass?: string;
+  style?: object;
   onClick: () => void;
 }
 
@@ -13,10 +14,11 @@ const Button = ({
   icon,
   className,
   imgClass,
+  style,
   onClick,
 }: ButtonProps) => {
   return (
-    <button type={type} className={className} onClick={onClick}>
+    <button type={type} className={className} onClick={onClick} style={style}>
       {text} <img src={icon} className={imgClass} />
     </button>
   );

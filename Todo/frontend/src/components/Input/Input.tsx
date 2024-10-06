@@ -4,8 +4,8 @@ interface InputProps {
   placeholder?: string;
   value?: string;
   className?: string;
-  onPress?: (e: any) => void;
-  onChange?: (e: any) => void;
+  onPress?: (e: React.KeyboardEvent) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Input = ({
